@@ -1,0 +1,57 @@
+name: Проверка и публикация сайта
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Проверка и подготовка сайта
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить файлы репозитория
+        uses: actions/checkout@v7
+
+      - name: Проверить страницу и локальные ресурсы
+        run: |
+          python3 -m unittest discover -s tests -v
+          node --check script.js
+
+      - name: Подготовить файлы для публикации
+        run: |
+          mkdir -p _site
+          cp index.html styles.css script.js _site/
+          cp -R assets _site/assets
+
+      - name: Сохранить артефакт GitHub Pages
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    name: Опубликовать на GitHub Pages
+    # Рабочие ветки и pull request проходят проверку, но не меняют сайт.
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Разместить сайт
+        id: deployment
+        uses: actions/deploy-pages@v5
