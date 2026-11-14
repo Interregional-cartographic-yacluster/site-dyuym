@@ -1,47 +1,44 @@
-// Without JavaScript, the navigation links stay visible. This enhances the
-// navigation with a collapsible menu on smaller screens.
+// The native details elements work without JavaScript. These enhancements
+// close the other section, close on outside click, and support Escape.
 (() => {
     const navigation = document.querySelector('.site-nav');
-    const menuButton = document.querySelector('.nav-toggle');
-    const menu = document.querySelector('#site-navigation');
+    if (!navigation) return;
 
-    if (!navigation || !menuButton || !menu) return;
+    const dropdowns = [...navigation.querySelectorAll('.nav-dropdown')];
 
-    const menuLabel = menuButton.querySelector('.nav-toggle-label');
-
-    function setMenuOpen(open) {
-        navigation.classList.toggle('is-open', open);
-        menuButton.setAttribute('aria-expanded', String(open));
-        menuLabel.textContent = open ? 'Закрыть' : 'Меню';
+    function closeDropdowns(except = null) {
+        dropdowns.forEach((dropdown) => {
+            if (dropdown !== except) dropdown.open = false;
+        });
     }
 
-    navigation.classList.add('is-enhanced');
-    menuButton.hidden = false;
-
-    menuButton.addEventListener('click', () => {
-        setMenuOpen(menuButton.getAttribute('aria-expanded') !== 'true');
+    dropdowns.forEach((dropdown) => {
+        dropdown.addEventListener('toggle', () => {
+            if (dropdown.open) closeDropdowns(dropdown);
+        });
     });
 
-    menu.addEventListener('click', (event) => {
-        if (event.target.closest('a')) setMenuOpen(false);
+    navigation.addEventListener('click', (event) => {
+        if (event.target.closest('a')) closeDropdowns();
     });
 
     document.addEventListener('click', (event) => {
-        if (navigation.classList.contains('is-open') && !navigation.contains(event.target)) {
-            setMenuOpen(false);
-        }
+        if (!navigation.contains(event.target)) closeDropdowns();
     });
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && navigation.classList.contains('is-open')) {
-            setMenuOpen(false);
-            menuButton.focus();
-        }
-    });
+        if (event.key !== 'Escape') return;
 
-    // Reset the mobile menu when switching to the desktop layout.
-    const desktopLayout = window.matchMedia('(min-width: 961px)');
-    desktopLayout.addEventListener('change', (event) => {
-        if (event.matches) setMenuOpen(false);
+        const openSubmenu = document.activeElement.closest('.nav-submenu[open]');
+        if (openSubmenu && navigation.contains(openSubmenu)) {
+            openSubmenu.open = false;
+            openSubmenu.querySelector('summary').focus();
+            return;
+        }
+
+        const openDropdown = dropdowns.find((dropdown) => dropdown.open);
+        if (!openDropdown) return;
+        closeDropdowns();
+        openDropdown.querySelector('summary').focus();
     });
 })();
