@@ -15,6 +15,8 @@ class PageParser(HTMLParser):
         self.ids = []
         self.navigation_links = []
         self.navigation_anchors = []
+        self.navigation_buttons = []
+        self.navigation_lists = []
         self.navigation_dropdowns = []
         self.navigation_submenus = []
         self.navigation_menu_labels = []
@@ -52,6 +54,10 @@ class PageParser(HTMLParser):
             self.headings.append(self.current_heading)
         if tag == "nav" and "site-nav" in classes:
             self.in_navigation = True
+        if self.in_navigation and tag == "button":
+            self.navigation_buttons.append(attrs)
+        if self.in_navigation and tag == "ul" and "nav-list" in classes:
+            self.navigation_lists.append(attrs)
         if self.in_navigation and tag == "a":
             self.navigation_links.append(attrs.get("href", ""))
             self.current_anchor = {
@@ -247,6 +253,35 @@ class AllPagesTests(unittest.TestCase):
             page.feed(path.read_text(encoding="utf-8"))
             cls.pages[path] = page
 
+    def test_brand_and_mobile_toggle_are_consistent(self):
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                brands = [
+                    anchor for anchor in page.navigation_anchors
+                    if "nav-brand" in anchor["attrs"].get("class", "").split()
+                ]
+                self.assertEqual(len(brands), 1)
+                self.assertEqual(brands[0]["text"], "ДЮйМ")
+                self.assertEqual(
+                    (path.parent / brands[0]["attrs"]["href"]).resolve(), ROOT / "index.html"
+                )
+                self.assertEqual(
+                    brands[0]["attrs"].get("aria-label"), "Медиашкола «ДЮйМ» — на главную"
+                )
+
+                toggles = [
+                    button for button in page.navigation_buttons
+                    if "nav-toggle" in button.get("class", "").split()
+                ]
+                self.assertEqual(len(toggles), 1)
+                self.assertEqual(toggles[0].get("type"), "button")
+                self.assertEqual(toggles[0].get("aria-expanded"), "false")
+                self.assertEqual(toggles[0].get("aria-label"), "Открыть меню")
+                self.assertEqual(toggles[0].get("aria-controls"), "site-nav-menu")
+                self.assertEqual(len(page.navigation_lists), 1)
+                self.assertEqual(page.navigation_lists[0].get("id"), toggles[0]["aria-controls"])
+                self.assertEqual(page.ids.count("site-nav-menu"), 1)
+
     def test_project_menu_has_exactly_two_working_links_on_every_page(self):
         expected = [
             ("МХ «КРЯК»", ROOT / "projects/kryak.html"),
@@ -284,6 +319,26 @@ class AllPagesTests(unittest.TestCase):
                 self.assertEqual(home_target, ROOT / "index.html")
                 self.assertEqual(home_url.fragment, "home")
                 self.assertEqual(home["attrs"].get("aria-current") == "page", path == ROOT / "index.html")
+
+    def test_kryak_formal_name_is_updated(self):
+        old_names = (
+            "молодёжный холдинг",
+            "молодёжного холдинга",
+            "картографический региональный я-кластер",
+            "президент холдинга",
+        )
+        for path in self.paths:
+            with self.subTest(page=path.relative_to(ROOT)):
+                html = path.read_text(encoding="utf-8").casefold()
+                for name in old_names:
+                    self.assertNotIn(name, html)
+
+        kryak = (ROOT / "projects/kryak.html").read_text(encoding="utf-8")
+        mediazavry = (ROOT / "projects/mediazavry.html").read_text(encoding="utf-8")
+        self.assertIn("<title>Молодёжное движение «КРЯК»</title>", kryak)
+        self.assertIn("отделение молодёжного движения «КРЯК»", kryak)
+        self.assertIn("Президент движения", kryak)
+        self.assertIn("Молодёжное движение «КРЯК»", mediazavry)
 
     def test_journal_menu_is_consistent_across_pages(self):
         for path, page in self.pages.items():
@@ -359,6 +414,16 @@ class AllPagesTests(unittest.TestCase):
         media = self.pages[ROOT / "projects/mediazavry.html"]
         self.assertEqual([h["text"] for h in kryak.headings if h["tag"] == "h1"], ["МХ «КРЯК»"])
         self.assertEqual([h["text"] for h in media.headings if h["tag"] == "h1"], ["«МЕДИАЗАВРЫ, вперёд!»"])
+        for page, names in (
+            (kryak, ["Роман Бугаенко", "Светлана Белоусова", "Полина Пожидаева", "Наталья Шеховцова", "Артём Русанов", "Кирилл Киреев"]),
+            (media, ["Мария Федосова", "Светлана Белоусова"]),
+        ):
+            self.assertIn("project-common.css", page.local_references)
+            self.assertEqual(page.class_counts["team-member"], len(names))
+            self.assertEqual(
+                [image["alt"] for image in page.images if "member-photo" in image.get("class", "").split()],
+                names,
+            )
         self.assertEqual(kryak.class_counts["supporter-item"], 21)
         self.assertTrue({
             "mapFallback", "mapViews", "worldSvg", "mapSvg", "countrySvg",
