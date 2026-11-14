@@ -1,0 +1,903 @@
+:root {
+    --primary: #8f7ed6;
+    --primary-dark: #7260c2;
+    --primary-light: #a897e8;
+    --secondary: #ff6b6b;
+    --accent: #4ecdc4;
+    --light: #ffffff;
+    --text: #333333;
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    --shadow-strong: 0 12px 25px rgba(0, 0, 0, 0.15);
+    --shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.18);
+    --transition: all 0.3s ease;
+    --transition-slow: all 0.6s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Raleway', sans-serif;
+    background: #8f7ed6;
+    color: white;
+    line-height: 1.6;
+    overflow-x: hidden;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Animated Background */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: #8f7ed6;
+    overflow: hidden;
+}
+
+.floating-shapes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 15s infinite linear;
+}
+
+/* Project Section - верхняя часть */
+.project-section {
+    padding: 80px 0 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-strong);
+}
+
+.project-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-strong);
+    margin-bottom: 40px;
+}
+
+.project-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.project-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    object-fit: cover;
+}
+
+.project-text h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.project-text p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
+
+.contacts-section {
+    margin-top: 30px;
+}
+
+.contacts-title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.contact-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.contact-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+}
+
+.contact-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+/* Team Section */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.team-member {
+    background: var(--primary);
+    color: white;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.team-member:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.member-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--accent);
+    margin: 0 auto 20px;
+}
+
+.member-name {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.member-role {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.section-title h2 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    bottom: -10px;
+    left: 0;
+    border-radius: 2px;
+}
+
+/* Mission Section */
+.mission {
+    padding: 80px 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-strong);
+    position: relative;
+    overflow: hidden;
+}
+
+.mission::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(143, 126, 214, 0.05) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+.mission-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+}
+
+.mission-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    flex: 1;
+    min-width: 280px;
+    max-width: 350px;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border-left: 4px solid var(--primary);
+}
+
+.mission-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(143, 126, 214, 0.05) 0%, rgba(78, 205, 196, 0.05) 100%);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.mission-card:hover {
+    transform: translateY(-10px) rotateX(5deg) scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+.mission-card:hover::before {
+    opacity: 1;
+}
+
+.mission-card i {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 20px;
+    transition: var(--transition);
+    display: inline-block;
+}
+
+.mission-card:hover i {
+    transform: scale(1.2) rotate(10deg);
+    color: var(--secondary);
+}
+
+.mission-card h3 {
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.mission-card p {
+    color: var(--text);
+    font-size: 1rem;
+}
+
+/* Book Section */
+.book {
+    padding: 80px 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-strong);
+}
+
+.book-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-cover {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.book-cover img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow-strong);
+    transition: var(--transition);
+}
+
+.book-cover img:hover {
+    transform: scale(1.03);
+    box-shadow: var(--shadow-hover);
+}
+
+.book-info {
+    flex: 2;
+    min-width: 300px;
+}
+
+.book-title {
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.book-description {
+    color: var(--text);
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+/* Comics Section */
+.comics {
+    padding: 80px 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-strong);
+}
+
+.comic-series {
+    margin-bottom: 50px;
+}
+
+.comic-series-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-dark);
+    font-size: 1.8rem;
+}
+
+.comic-pages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.comic-page {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.comic-page:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+/* VK Link Block */
+.vk-link-block {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    height: 100%;
+    min-height: 200px;
+}
+
+.vk-link-block:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+.vk-link-block i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.vk-link-block h4 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.vk-link-block p {
+    margin-bottom: 12px;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.vk-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: var(--transition);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-size: 0.9rem;
+}
+
+.vk-link-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Video Section */
+.video-section {
+    padding: 80px 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-strong);
+}
+
+.video-container {
+    max-width: 853px;
+    margin: 0 auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-strong);
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 480px;
+    display: block;
+}
+
+/* Postcards Section */
+.postcards {
+    padding: 80px 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-strong);
+}
+
+.postcards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.postcard-item {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 2px solid var(--primary-light);
+}
+
+.postcard-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.postcard-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+}
+
+.postcard-title {
+    color: var(--primary-dark);
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+/* Supporters Section */
+.supporters {
+    padding: 80px 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-strong);
+}
+
+.supporters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.supporter-item {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(143, 126, 214, 0.2);
+    cursor: default;
+}
+
+.supporter-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(143, 126, 214, 0.05) 0%, rgba(255, 107, 107, 0.05) 100%);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.supporter-item:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: var(--shadow-hover);
+}
+
+.supporter-item:hover::before {
+    opacity: 1;
+}
+
+.supporter-logo {
+    max-width: 100%;
+    max-height: 60px;
+    object-fit: contain;
+    transition: var(--transition);
+    margin-bottom: 15px;
+}
+
+.supporter-item:hover .supporter-logo {
+    transform: scale(1.1);
+}
+
+.supporter-name {
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-size: 0.9rem;
+    line-height: 1.3;
+    margin-top: 10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
+    100% {
+        transform: translateY(0) rotate(360deg);
+    }
+}
+
+@keyframes textShine {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Улучшенная адаптивность */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 100%;
+        padding: 0 30px;
+    }
+}
+
+@media (max-width: 992px) {
+    .project-text h1 {
+        font-size: 2rem;
+    }
+
+    .mission-card {
+        min-width: 250px;
+    }
+
+    .section-title h2 {
+        font-size: 2.2rem;
+    }
+
+    .book-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .comic-pages-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .video-container iframe {
+        height: 400px;
+    }
+
+    .postcards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .supporters-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .project-section {
+        padding: 60px 0 30px;
+    }
+
+    .project-text h1 {
+        font-size: 1.8rem;
+    }
+
+    .project-text p {
+        font-size: 1.1rem;
+    }
+
+    .section-title h2 {
+        font-size: 2rem;
+    }
+
+    .mission-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .mission-card {
+        max-width: 100%;
+    }
+
+    .mission, .book, .comics, .video-section, .postcards, .project-section, .supporters {
+        padding: 50px 0;
+    }
+
+    .contact-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .contact-link {
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .member-photo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .project-title {
+        text-align: center;
+    }
+
+    .book-title {
+        font-size: 1.7rem;
+    }
+
+    .comic-pages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .vk-link-block {
+        padding: 15px;
+    }
+
+    .video-container iframe {
+        height: 350px;
+    }
+
+    .postcards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .supporters-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 0 15px;
+    }
+
+    .project-section {
+        padding: 40px 0 20px;
+    }
+
+    .project-text h1 {
+        font-size: 1.6rem;
+    }
+
+    .project-text p {
+        font-size: 1rem;
+    }
+
+    .section-title h2 {
+        font-size: 1.6rem;
+    }
+
+    .mission, .book, .comics, .video-section, .postcards, .project-section, .supporters {
+        padding: 40px 0;
+    }
+
+    .mission-card {
+        padding: 20px;
+    }
+
+    .mission-card i {
+        font-size: 2rem;
+    }
+
+    .project-header {
+        padding: 30px 20px;
+    }
+
+    .book-title {
+        font-size: 1.5rem;
+    }
+
+    .vk-link-block {
+        padding: 12px;
+    }
+
+    .vk-link-block i {
+        font-size: 1.8rem;
+    }
+
+    .vk-link-block h4 {
+        font-size: 1rem;
+    }
+
+    .comic-pages-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .video-container iframe {
+        height: 250px;
+    }
+
+    .supporter-item {
+        height: 160px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .project-text h1 {
+        font-size: 1.4rem;
+    }
+
+    .section-title h2 {
+        font-size: 1.4rem;
+    }
+
+    .mission-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .mission-card p {
+        font-size: 0.9rem;
+    }
+
+    .video-container iframe {
+        height: 200px;
+    }
+
+    .supporter-item {
+        height: 140px;
+        padding: 15px;
+    }
+
+    .supporter-name {
+        font-size: 0.8rem;
+    }
+}

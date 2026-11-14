@@ -20,6 +20,12 @@ class PageParser(HTMLParser):
         self.navigation_menu_labels = []
         self.details_stack = []
         self.local_references = []
+        self.all_links = []
+        self.images = []
+        self.iframes = []
+        self.class_counts = Counter()
+        self.headings = []
+        self.current_heading = None
         self.canonical_url = None
         self.paragraphs = {"footer-credit": [], "footer-notice": []}
         self.in_navigation = False
@@ -32,13 +38,27 @@ class PageParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         classes = attrs.get("class", "").split()
+        self.class_counts.update(classes)
         if "id" in attrs:
             self.ids.append(attrs["id"])
+        if tag == "a":
+            self.all_links.append(attrs)
+        if tag == "img":
+            self.images.append(attrs)
+        if tag == "iframe":
+            self.iframes.append(attrs)
+        if tag in {"h1", "h2", "h3"}:
+            self.current_heading = {"tag": tag, "text": []}
+            self.headings.append(self.current_heading)
         if tag == "nav" and "site-nav" in classes:
             self.in_navigation = True
         if self.in_navigation and tag == "a":
             self.navigation_links.append(attrs.get("href", ""))
-            self.current_anchor = {"attrs": attrs, "text": []}
+            self.current_anchor = {
+                "attrs": attrs,
+                "text": [],
+                "owner": self.details_stack[-1] if self.details_stack else None,
+            }
             self.navigation_anchors.append(self.current_anchor)
         if self.in_navigation and tag == "details":
             dropdown = {
@@ -79,6 +99,9 @@ class PageParser(HTMLParser):
                 self.canonical_url = attrs["href"]
 
     def handle_endtag(self, tag):
+        if self.current_heading is not None and tag == self.current_heading["tag"]:
+            self.current_heading["text"] = " ".join("".join(self.current_heading["text"]).split())
+            self.current_heading = None
         if tag == "a" and self.current_anchor is not None:
             self.current_anchor["text"] = " ".join("".join(self.current_anchor["text"]).split())
             self.current_anchor = None
@@ -100,6 +123,8 @@ class PageParser(HTMLParser):
             self.in_footer = False
 
     def handle_data(self, data):
+        if self.current_heading is not None:
+            self.current_heading["text"].append(data)
         if self.current_anchor is not None:
             self.current_anchor["text"].append(data)
         if self.current_summary is not None:
@@ -206,6 +231,148 @@ class HomePageTests(unittest.TestCase):
                         (stylesheet.parent / unquote(url.path)).is_file(),
                         f"{stylesheet.name}: {reference}",
                     )
+
+
+class AllPagesTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.paths = (
+            ROOT / "index.html",
+            ROOT / "projects/kryak.html",
+            ROOT / "projects/mediazavry.html",
+        )
+        cls.pages = {}
+        for path in cls.paths:
+            page = PageParser()
+            page.feed(path.read_text(encoding="utf-8"))
+            cls.pages[path] = page
+
+    def test_project_menu_has_exactly_two_working_links_on_every_page(self):
+        expected = [
+            ("МХ «КРЯК»", ROOT / "projects/kryak.html"),
+            ("«МЕДИАЗАВРЫ, вперёд!»", ROOT / "projects/mediazavry.html"),
+        ]
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                self.assertEqual(
+                    [item["summary"] for item in page.navigation_dropdowns],
+                    ["Наши журналы", "Проекты"],
+                )
+                for dropdown in page.navigation_dropdowns:
+                    self.assertEqual(dropdown["attrs"].get("name"), "primary-navigation")
+                    self.assertNotIn("open", dropdown["attrs"])
+                    self.assertEqual(dropdown["panels"], 1)
+                projects = page.navigation_dropdowns[1]
+                self.assertFalse(any(item["parent"] is projects for item in page.navigation_submenus))
+                self.assertEqual(
+                    [item["text"] for item in page.navigation_menu_labels if item["owner"] is projects],
+                    [title for title, _ in expected],
+                )
+                anchors = [item for item in page.navigation_anchors if item["owner"] is projects]
+                self.assertEqual(
+                    [(a["text"], (path.parent / unquote(urlsplit(a["attrs"]["href"]).path)).resolve())
+                     for a in anchors],
+                    expected,
+                )
+                for anchor, (_, target) in zip(anchors, expected):
+                    self.assertTrue(target.is_file())
+                    self.assertEqual(anchor["attrs"].get("aria-current") == "page", path == target)
+
+                home = next(a for a in page.navigation_anchors if a["text"] == "Главная")
+                home_url = urlsplit(home["attrs"]["href"])
+                home_target = (path.parent / unquote(home_url.path)).resolve() if home_url.path else path
+                self.assertEqual(home_target, ROOT / "index.html")
+                self.assertEqual(home_url.fragment, "home")
+                self.assertEqual(home["attrs"].get("aria-current") == "page", path == ROOT / "index.html")
+
+    def test_journal_menu_is_consistent_across_pages(self):
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                journals = page.navigation_dropdowns[0]
+                submenus = [item for item in page.navigation_submenus if item["parent"] is journals]
+                self.assertEqual(len(submenus), 1)
+                self.assertEqual(submenus[0]["summary"], "Медиасобытия")
+                labels = [
+                    item["text"] for item in page.navigation_menu_labels
+                    if item["owner"] is journals or item["owner"] is submenus[0]
+                ]
+                self.assertEqual(
+                    labels,
+                    ["Светлячок", "Медиасобытия", "Волга-ЮНПРЕСС", "Media Camp", "48-ая волна", "Глобус"],
+                )
+
+    def test_all_footers_and_canonical_urls(self):
+        credit = "© МБУ ДО «Центр детского творчества», 2025 – 2026 | Размещено при поддержке МХ «КРЯК»"
+        notice = "Использование материалов, размещённых на этом сайте, возможно только при обязательном указании автора и ссылки на источник."
+        domain = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                text = {key: " ".join("".join(parts).split()) for key, parts in page.paragraphs.items()}
+                self.assertEqual(text["footer-credit"], credit)
+                self.assertEqual(text["footer-notice"], notice)
+                suffix = "" if path.name == "index.html" else path.relative_to(ROOT).as_posix()
+                self.assertEqual(page.canonical_url, f"https://{domain}/{suffix}")
+
+    def test_links_assets_and_fragments_are_valid(self):
+        stylesheets = set()
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                counts = Counter(page.ids)
+                self.assertTrue(all(count == 1 for count in counts.values()), "Page IDs must be unique")
+                for link in page.all_links:
+                    href = link.get("href", "")
+                    self.assertTrue(href, f"Empty link on {path}")
+                    if link.get("target") == "_blank":
+                        self.assertTrue({"noopener", "noreferrer"} <= set(link.get("rel", "").split()))
+                    url = urlsplit(href)
+                    if url.scheme or url.netloc:
+                        continue
+                    target = (path.parent / unquote(url.path)).resolve() if url.path else path
+                    self.assertTrue(target.is_file(), f"{path}: missing {href}")
+                    if url.fragment and target in self.pages:
+                        self.assertEqual(Counter(self.pages[target].ids)[unquote(url.fragment)], 1, href)
+                for image in page.images:
+                    self.assertIn("alt", image, f"Image without alt: {image}")
+                    source = urlsplit(image.get("src", ""))
+                    self.assertFalse(source.scheme or source.netloc, f"Image is not local: {source.geturl()}")
+                    self.assertTrue(source.path, "Image source is empty")
+                for ref in page.local_references:
+                    url = urlsplit(ref)
+                    if not url.scheme and not url.netloc:
+                        target = (path.parent / unquote(url.path)).resolve()
+                        self.assertTrue(target.is_file(), f"{path}: missing {ref}")
+                        if target.suffix == ".css":
+                            stylesheets.add(target)
+
+        for stylesheet in stylesheets:
+            content = stylesheet.read_text(encoding="utf-8")
+            for ref in re.findall(r"url\(\s*['\"]?([^\s)'\"]+)", content):
+                url = urlsplit(ref)
+                if not url.scheme and not url.netloc:
+                    self.assertTrue(
+                        (stylesheet.parent / unquote(url.path)).is_file(),
+                        f"{stylesheet}: missing {ref}",
+                    )
+
+    def test_project_content_and_map_controls_are_present(self):
+        kryak = self.pages[ROOT / "projects/kryak.html"]
+        media = self.pages[ROOT / "projects/mediazavry.html"]
+        self.assertEqual([h["text"] for h in kryak.headings if h["tag"] == "h1"], ["МХ «КРЯК»"])
+        self.assertEqual([h["text"] for h in media.headings if h["tag"] == "h1"], ["«МЕДИАЗАВРЫ, вперёд!»"])
+        self.assertEqual(kryak.class_counts["supporter-item"], 21)
+        self.assertTrue({
+            "mapFallback", "mapViews", "worldSvg", "mapSvg", "countrySvg",
+            "openWorldMap", "openRussiaMap", "openBelarusMap", "worldData", "russiaData", "countryData",
+        } <= set(kryak.ids))
+        self.assertEqual(media.class_counts["comic-series"], 5)
+        self.assertEqual(media.class_counts["comic-page"], 35)
+        self.assertEqual(len(media.iframes), 1)
+        self.assertEqual(media.iframes[0].get("title"), "Медиазавры на каникулах")
+        self.assertEqual(
+            media.iframes[0].get("src"),
+            "https://vk.com/video_ext.php?oid=-224639177&id=456239043",
+        )
+        self.assertTrue(any(link.get("href") == media.iframes[0]["src"] for link in media.all_links))
 
 
 if __name__ == "__main__":

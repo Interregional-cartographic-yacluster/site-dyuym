@@ -20,16 +20,18 @@ jobs:
       - name: Получить файлы репозитория
         uses: actions/checkout@v7
 
-      - name: Проверить страницу и локальные ресурсы
+      - name: Проверить страницы и локальные ресурсы
         run: |
           python3 -m unittest discover -s tests -v
           node --check script.js
+          node --check projects/kryak.js
 
       - name: Подготовить файлы для публикации
         run: |
           mkdir -p _site
           cp index.html styles.css script.js _site/
           cp -R assets _site/assets
+          cp -R projects _site/projects
 
       - name: Сохранить артефакт GitHub Pages
         uses: actions/upload-pages-artifact@v5
