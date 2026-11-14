@@ -14,13 +14,20 @@ class PageParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.ids = []
         self.navigation_links = []
+        self.navigation_anchors = []
+        self.navigation_dropdowns = []
+        self.navigation_submenus = []
+        self.navigation_menu_labels = []
+        self.details_stack = []
         self.local_references = []
         self.canonical_url = None
         self.paragraphs = {"footer-credit": [], "footer-notice": []}
-        self.menu_button = None
         self.in_navigation = False
         self.in_footer = False
         self.current_paragraph = None
+        self.current_anchor = None
+        self.current_summary = None
+        self.current_menu_label = None
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -31,8 +38,33 @@ class PageParser(HTMLParser):
             self.in_navigation = True
         if self.in_navigation and tag == "a":
             self.navigation_links.append(attrs.get("href", ""))
-        if tag == "button" and "nav-toggle" in classes:
-            self.menu_button = attrs
+            self.current_anchor = {"attrs": attrs, "text": []}
+            self.navigation_anchors.append(self.current_anchor)
+        if self.in_navigation and tag == "details":
+            dropdown = {
+                "attrs": attrs,
+                "summary": None,
+                "panels": 0,
+                "parent": self.details_stack[-1] if self.details_stack else None,
+            }
+            self.details_stack.append(dropdown)
+            if "nav-dropdown" in classes:
+                self.navigation_dropdowns.append(dropdown)
+            if "nav-submenu" in classes:
+                self.navigation_submenus.append(dropdown)
+        if self.in_navigation and self.details_stack and "nav-dropdown-panel" in classes:
+            self.details_stack[-1]["panels"] += 1
+        if self.in_navigation and tag == "summary":
+            self.current_summary = {
+                "owner": self.details_stack[-1] if self.details_stack else None,
+                "text": [],
+            }
+        if self.in_navigation and tag == "span" and "nav-menu-label" in classes:
+            self.current_menu_label = {
+                "owner": self.details_stack[-1] if self.details_stack else None,
+                "text": [],
+            }
+            self.navigation_menu_labels.append(self.current_menu_label)
         if tag == "footer":
             self.in_footer = True
         if self.in_footer and tag == "p":
@@ -47,6 +79,19 @@ class PageParser(HTMLParser):
                 self.canonical_url = attrs["href"]
 
     def handle_endtag(self, tag):
+        if tag == "a" and self.current_anchor is not None:
+            self.current_anchor["text"] = " ".join("".join(self.current_anchor["text"]).split())
+            self.current_anchor = None
+        if tag == "span" and self.current_menu_label is not None:
+            self.current_menu_label["text"] = " ".join("".join(self.current_menu_label["text"]).split())
+            self.current_menu_label = None
+        if tag == "summary" and self.current_summary is not None:
+            owner = self.current_summary["owner"]
+            if owner is not None:
+                owner["summary"] = " ".join("".join(self.current_summary["text"]).split())
+            self.current_summary = None
+        if self.in_navigation and tag == "details" and self.details_stack:
+            self.details_stack.pop()
         if tag == "nav":
             self.in_navigation = False
         if tag == "p":
@@ -55,6 +100,12 @@ class PageParser(HTMLParser):
             self.in_footer = False
 
     def handle_data(self, data):
+        if self.current_anchor is not None:
+            self.current_anchor["text"].append(data)
+        if self.current_summary is not None:
+            self.current_summary["text"].append(data)
+        if self.current_menu_label is not None:
+            self.current_menu_label["text"].append(data)
         if self.current_paragraph:
             self.paragraphs[self.current_paragraph].append(data)
 
@@ -65,24 +116,57 @@ class HomePageTests(unittest.TestCase):
         cls.page = PageParser()
         cls.page.feed((ROOT / "index.html").read_text(encoding="utf-8"))
 
-    def test_navigation_points_to_existing_unique_sections(self):
-        self.assertEqual(
-            set(self.page.navigation_links),
-            {"#home", "#mission", "#directions", "#teacher", "#details", "#address", "#contacts"},
-        )
+    def test_navigation_links_point_to_existing_targets(self):
+        self.assertIn("#home", self.page.navigation_links)
         counts = Counter(self.page.ids)
         self.assertTrue(all(count == 1 for count in counts.values()), "Page IDs must be unique")
         for link in self.page.navigation_links:
-            self.assertEqual(counts[link[1:]], 1, f"Missing target for {link}")
+            self.assertTrue(link, "Navigation links must have a destination")
+            url = urlsplit(link)
+            if link.startswith("#"):
+                self.assertEqual(counts[link[1:]], 1, f"Missing target for {link}")
+            elif not url.scheme and not url.netloc:
+                self.assertTrue((ROOT / unquote(url.path)).is_file(), f"Missing page for {link}")
 
-    def test_menu_has_accessible_initial_state(self):
-        button = self.page.menu_button
-        self.assertIsNotNone(button)
-        self.assertEqual(button.get("type"), "button")
-        self.assertEqual(button.get("aria-controls"), "site-navigation")
-        self.assertEqual(button.get("aria-expanded"), "false")
-        self.assertIn("hidden", button)  # The links remain visible without JavaScript.
-        self.assertIn("site-navigation", self.page.ids)
+    def test_navigation_has_home_link_and_two_native_dropdown_sections(self):
+        homes = [
+            anchor for anchor in self.page.navigation_anchors
+            if anchor["attrs"].get("href") == "#home"
+        ]
+        self.assertEqual(len(homes), 1)
+        self.assertEqual(homes[0]["text"], "Главная")
+        self.assertEqual(homes[0]["attrs"].get("aria-current"), "page")
+
+        self.assertEqual(
+            [dropdown["summary"] for dropdown in self.page.navigation_dropdowns],
+            ["Наши журналы", "Проекты"],
+        )
+        for dropdown in self.page.navigation_dropdowns:
+            self.assertEqual(dropdown["attrs"].get("name"), "primary-navigation")
+            self.assertNotIn("open", dropdown["attrs"])
+            self.assertEqual(dropdown["panels"], 1)
+
+    def test_journal_menu_has_requested_entries_and_nested_section(self):
+        journals = self.page.navigation_dropdowns[0]
+        submenus = [item for item in self.page.navigation_submenus if item["parent"] is journals]
+        self.assertEqual(len(submenus), 1)
+        submenu = submenus[0]
+        self.assertEqual(submenu["summary"], "Медиасобытия")
+        self.assertNotIn("open", submenu["attrs"])
+
+        labels = [
+            item for item in self.page.navigation_menu_labels
+            if item["owner"] is journals or item["owner"] is submenu
+        ]
+        self.assertEqual(
+            [item["text"] for item in labels],
+            ["Светлячок", "Медиасобытия", "Волга-ЮНПРЕСС", "Media Camp", "48-ая волна", "Глобус"],
+        )
+        for item in labels:
+            expected_owner = (
+                submenu if item["text"] in {"Медиасобытия", "Волга-ЮНПРЕСС"} else journals
+            )
+            self.assertIs(item["owner"], expected_owner, item["text"])
 
     def test_footer_contains_the_requested_text(self):
         text = {
