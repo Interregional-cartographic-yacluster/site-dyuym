@@ -25,13 +25,10 @@ jobs:
           python3 -m unittest discover -s tests -v
           node --check script.js
           node --check projects/kryak.js
+          node --check journals/svetlyachok.js
 
-      - name: Подготовить файлы для публикации
-        run: |
-          mkdir -p _site
-          cp index.html styles.css script.js _site/
-          cp -R assets _site/assets
-          cp -R projects _site/projects
+      - name: Подготовить файлы и понятные адреса для публикации
+        run: python3 tools/build_site.py
 
       - name: Сохранить артефакт GitHub Pages
         uses: actions/upload-pages-artifact@v5
