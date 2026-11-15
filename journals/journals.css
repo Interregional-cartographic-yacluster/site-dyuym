@@ -1,7 +1,6 @@
 /* Journal pages share the site's navigation and footer. The slightly deeper
    purple keeps the white archive headings and status text readable. */
-body.journal-page,
-.journal-page .animated-bg {
+body.journal-page {
     background: #6c58b7;
 }
 

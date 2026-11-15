@@ -87,43 +87,6 @@ h1, h2, h3, h4, h5 {
     padding: 0 20px;
 }
 
-/* Animated Background */
-.animated-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: #8f7ed6;
-    overflow: hidden;
-}
-
-.floating-shapes {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-.shape {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    animation: float 15s infinite linear;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0) rotate(0deg);
-    }
-    50% {
-        transform: translateY(-20px) rotate(180deg);
-    }
-    100% {
-        transform: translateY(0) rotate(360deg);
-    }
-}
-
 /* Header */
 .header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -904,7 +867,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
     }
 }
 
-/* Provide a usable address link even if the map service cannot load. */
+/* Show the address even if the map service cannot load. */
 .address .map-container {
     position: relative;
     min-height: 400px;
@@ -944,15 +907,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
     border-radius: 50%;
     font-size: 1.4rem;
     box-shadow: 0 8px 18px rgba(86, 63, 160, 0.25);
-}
-
-.map-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #503a9d;
-    text-decoration: underline;
-    text-underline-offset: 3px;
 }
 
 /* Footer adapted from the supplied КРЯК page. */

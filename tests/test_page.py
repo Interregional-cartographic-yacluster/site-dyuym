@@ -245,6 +245,24 @@ class HomePageTests(unittest.TestCase):
         self.assertEqual(self.page.canonical_url, f"https://{domain}/главная")
         self.assertTrue((ROOT / ".nojekyll").is_file())
 
+    def test_address_and_embedded_map_remain_without_open_map_link(self):
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        self.assertIn("г. Курск, проспект Дружбы, 2", html)
+        self.assertIn("address", self.page.ids)
+        self.assertEqual(self.page.class_counts["map-container"], 1)
+        self.assertEqual(self.page.class_counts["map-fallback"], 1)
+        self.assertTrue(any(
+            ref.startswith("https://api-maps.yandex.ru/services/constructor/")
+            for ref in self.page.local_references
+        ))
+        self.assertNotIn("Открыть на карте", html)
+        self.assertEqual(self.page.class_counts["map-link"], 0)
+        self.assertFalse(any(
+            urlsplit(link.get("href", "")).netloc == "yandex.ru"
+            and urlsplit(link.get("href", "")).path == "/maps/"
+            for link in self.page.all_links
+        ))
+
     def test_local_page_and_stylesheet_assets_exist(self):
         for reference in self.page.local_references:
             url = urlsplit(reference)
@@ -283,6 +301,26 @@ class AllPagesTests(unittest.TestCase):
             page = PageParser()
             page.feed(path.read_text(encoding="utf-8"))
             cls.pages[path] = page
+
+    def test_no_decorative_background_circles(self):
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                self.assertEqual(page.class_counts["animated-bg"], 0)
+                self.assertEqual(page.class_counts["floating-shapes"], 0)
+                self.assertEqual(page.class_counts["shape"], 0)
+
+        for stylesheet in (
+            ROOT / "styles.css",
+            ROOT / "journals/journals.css",
+            ROOT / "projects/kryak.css",
+            ROOT / "projects/mediazavry.css",
+        ):
+            with self.subTest(stylesheet=stylesheet.relative_to(ROOT)):
+                content = stylesheet.read_text(encoding="utf-8")
+                self.assertNotIn(".animated-bg", content)
+                self.assertNotIn(".floating-shapes", content)
+                self.assertNotRegex(content, r"(?m)^\.shape\s*\{")
+                self.assertNotIn("@keyframes float", content)
 
     def test_brand_and_mobile_toggle_are_consistent(self):
         for path, page in self.pages.items():
