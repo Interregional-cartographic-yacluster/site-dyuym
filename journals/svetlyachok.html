@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Журнал «Светлячок» — архив выпусков (2011–2026)</title>
+    <meta name="description" content="Архив выпусков детского журнала «Светлячок» с 2011 по 2026 год.">
+    <link rel="canonical" href="https://www.cdtkursk-dyuym.ru/светлячок">
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/journals/journals.css">
+    <script src="/script.js" defer></script>
+    <script src="/journals/svetlyachok.js" defer></script>
+</head>
+<body class="journal-page">
+    <a class="skip-link" href="#main-content">Перейти к содержанию</a>
+    <!-- Animated Background -->
+    <div class="animated-bg" aria-hidden="true">
+        <div class="floating-shapes">
+            <div class="shape" style="width: 100px; height: 100px; top: 10%; left: 5%;"></div>
+            <div class="shape" style="width: 150px; height: 150px; top: 60%; left: 80%;"></div>
+            <div class="shape" style="width: 70px; height: 70px; top: 80%; left: 10%;"></div>
+            <div class="shape" style="width: 120px; height: 120px; top: 30%; left: 70%;"></div>
+        </div>
+    </div>
+
+    <nav class="site-nav" aria-label="Основная навигация">
+        <a class="nav-brand" href="/главная" aria-label="Медиашкола «ДЮйМ» — на главную">ДЮйМ</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-menu" aria-label="Открыть меню">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </button>
+        <ul class="nav-list" id="site-nav-menu">
+            <li>
+                <a class="nav-link" href="/главная">
+                    <span>Главная</span>
+                </a>
+            </li>
+            <li>
+                <details class="nav-dropdown" name="primary-navigation">
+                    <summary class="nav-link">
+                        <span>Наши журналы</span>
+                        <svg class="nav-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2 4 6 8 10 4Z" fill="currentColor"></path></svg>
+                    </summary>
+                    <div class="nav-dropdown-panel nav-journals-panel">
+                        <ul class="nav-menu-list">
+                            <li>
+                                <a class="nav-menu-item" href="/светлячок" aria-current="page">
+                                    <span class="nav-menu-label">Светлячок</span>
+                                </a>
+                            </li>
+                            <li>
+                                <details class="nav-submenu">
+                                    <summary class="nav-menu-item">
+                                        <span class="nav-menu-label">Медиасобытия</span>
+                                        <svg class="nav-sub-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2 4 6 8 10 4Z" fill="currentColor"></path></svg>
+                                    </summary>
+                                    <ul class="nav-submenu-list">
+                                        <li>
+                                            <a class="nav-menu-item" href="/медиасобытия/волга-юнпресс">
+                                                <span class="nav-menu-label">Волга-ЮНПРЕСС</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <a class="nav-menu-item" href="/media-camp">
+                                    <span class="nav-menu-label">Media Camp</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-menu-item" href="/48-ая-волна">
+                                    <span class="nav-menu-label">48-ая волна</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-menu-item" href="/глобус">
+                                    <span class="nav-menu-label">Глобус</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+            </li>
+            <li>
+                <details class="nav-dropdown" name="primary-navigation">
+                    <summary class="nav-link">
+                        <span>Проекты</span>
+                        <svg class="nav-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2 4 6 8 10 4Z" fill="currentColor"></path></svg>
+                    </summary>
+                    <div class="nav-dropdown-panel nav-projects-panel">
+                        <ul class="nav-menu-list">
+                            <li>
+                                <a class="nav-menu-item" href="/проекты/мх-кряк">
+                                    <span class="nav-menu-label">МХ «КРЯК»</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-menu-item" href="/проекты/медиазавры-вперёд">
+                                    <span class="nav-menu-label">«МЕДИАЗАВРЫ, вперёд!»</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="journal-main" id="main-content" tabindex="-1">
+        <header class="journal-hero">
+            <h1>Журнал «Светлячок»</h1>
+            <p class="journal-subtitle" id="pageSubtitle">Архив выпусков, 2011–2026</p>
+        </header>
+        <div class="journal-controls" id="journalControls" hidden>
+            <div class="year-navigation" id="yearNavigation" role="group" aria-label="Выберите год выпуска"></div>
+            <div class="journal-search" role="search">
+                <label class="journal-visually-hidden" for="searchInput">Поиск по номеру выпуска или году</label>
+                <input type="search" id="searchInput" placeholder="Номер выпуска или год, например 58 или 2025" autocomplete="off">
+                <button class="clear-search" id="clearSearchBtn" type="button" hidden>Очистить поиск</button>
+            </div>
+            <p class="journal-status" id="journalStatus" role="status" aria-live="polite"></p>
+        </div>
+        <div class="journal-grid" id="issuesGrid">
+            <article class="journal-card" data-issue-number="1" data-start-year="2011" data-end-year="2011" data-period="сентябрь-октябрь 2011" data-start-period="сентябрь-октябрь 2011" data-end-period="сентябрь-октябрь 2011">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-01.webp" alt="Обложка «Светлячок» №1" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №1</h2>
+                    <p class="journal-period">сентябрь-октябрь 2011</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/bb9F/cnR6hWHvb" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №1 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="2" data-start-year="2011" data-end-year="2011" data-period="ноябрь-декабрь 2011" data-start-period="ноябрь-декабрь 2011" data-end-period="ноябрь-декабрь 2011">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-02.webp" alt="Обложка «Светлячок» №2" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №2</h2>
+                    <p class="journal-period">ноябрь-декабрь 2011</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/zZ5m/WuehCVwGw" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №2 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="3" data-start-year="2012" data-end-year="2012" data-period="январь-февраль 2012" data-start-period="январь-февраль 2012" data-end-period="январь-февраль 2012">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-03.webp" alt="Обложка «Светлячок» №3" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №3</h2>
+                    <p class="journal-period">январь-февраль 2012</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/M1EE/yfMifSKZV" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №3 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="4" data-start-year="2012" data-end-year="2012" data-period="март-апрель 2012" data-start-period="март-апрель 2012" data-end-period="март-апрель 2012">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-04.webp" alt="Обложка «Светлячок» №4" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №4</h2>
+                    <p class="journal-period">март-апрель 2012</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/t58V/mkGomWaw6" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №4 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="5" data-start-year="2012" data-end-year="2012" data-period="май-июнь 2012" data-start-period="май-июнь 2012" data-end-period="май-июнь 2012">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-05.webp" alt="Обложка «Светлячок» №5" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №5</h2>
+                    <p class="journal-period">май-июнь 2012</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/kJSW/PYqTqGR9c" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №5 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="6" data-start-year="2012" data-end-year="2012" data-period="сентябрь-октябрь 2012" data-start-period="сентябрь-октябрь 2012" data-end-period="сентябрь-октябрь 2012">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-06.webp" alt="Обложка «Светлячок» №6" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №6</h2>
+                    <p class="journal-period">сентябрь-октябрь 2012</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/3kur/FAD8YVu2f" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №6 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="7" data-start-year="2012" data-end-year="2012" data-period="ноябрь-декабрь 2012" data-start-period="ноябрь-декабрь 2012" data-end-period="ноябрь-декабрь 2012">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-07.webp" alt="Обложка «Светлячок» №7" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №7</h2>
+                    <p class="journal-period">ноябрь-декабрь 2012</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/PtmH/j9pvf4ThT" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №7 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="8" data-start-year="2013" data-end-year="2013" data-period="январь-февраль 2013" data-start-period="январь-февраль 2013" data-end-period="январь-февраль 2013">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-08.webp" alt="Обложка «Светлячок» №8" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №8</h2>
+                    <p class="journal-period">январь-февраль 2013</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/JPQJ/HHk12NMxC" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №8 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="9" data-start-year="2013" data-end-year="2013" data-period="весна 2013" data-start-period="весна 2013" data-end-period="весна 2013">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-09.webp" alt="Обложка «Светлячок» №9" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №9</h2>
+                    <p class="journal-period">весна 2013</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/mU2b/cgVpjDK5d" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №9 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="10" data-start-year="2013" data-end-year="2013" data-period="сентябрь-октябрь 2013" data-start-period="сентябрь-октябрь 2013" data-end-period="сентябрь-октябрь 2013">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-10.webp" alt="Обложка «Светлячок» №10" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №10</h2>
+                    <p class="journal-period">сентябрь-октябрь 2013</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/adUd/vQ1cdYggh" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №10 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="11" data-start-year="2013" data-end-year="2013" data-period="ноябрь-декабрь 2013" data-start-period="ноябрь-декабрь 2013" data-end-period="ноябрь-декабрь 2013">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-11.webp" alt="Обложка «Светлячок» №11" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №11</h2>
+                    <p class="journal-period">ноябрь-декабрь 2013</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/Yqxe/wvwU1sf9L" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №11 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="12" data-start-year="2014" data-end-year="2014" data-period="январь-февраль 2014" data-start-period="январь-февраль 2014" data-end-period="январь-февраль 2014">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-12.webp" alt="Обложка «Светлячок» №12" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №12</h2>
+                    <p class="journal-period">январь-февраль 2014</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/uGxK/mgTMzFCKY" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №12 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="13" data-start-year="2014" data-end-year="2014" data-period="весна 2014" data-start-period="весна 2014" data-end-period="весна 2014">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-13.webp" alt="Обложка «Светлячок» №13" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №13</h2>
+                    <p class="journal-period">весна 2014</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/jfLa/hQxDTN3zM" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №13 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="14" data-start-year="2014" data-end-year="2014" data-period="сентябрь-октябрь 2014" data-start-period="сентябрь-октябрь 2014" data-end-period="сентябрь-октябрь 2014">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-14.webp" alt="Обложка «Светлячок» №14" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №14</h2>
+                    <p class="journal-period">сентябрь-октябрь 2014</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/gQWG/wT17zsDfr" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №14 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="15" data-start-year="2014" data-end-year="2014" data-period="ноябрь-декабрь 2014" data-start-period="ноябрь-декабрь 2014" data-end-period="ноябрь-декабрь 2014">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-15.webp" alt="Обложка «Светлячок» №15" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №15</h2>
+                    <p class="journal-period">ноябрь-декабрь 2014</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/htDW/ys48w29Nv" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №15 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="16" data-start-year="2015" data-end-year="2015" data-period="январь-февраль 2015" data-start-period="январь-февраль 2015" data-end-period="январь-февраль 2015">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-16.webp" alt="Обложка «Светлячок» №16" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №16</h2>
+                    <p class="journal-period">январь-февраль 2015</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/AUJe/r3DPMhagc" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №16 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="17" data-start-year="2015" data-end-year="2015" data-period="весна 2015" data-start-period="весна 2015" data-end-period="весна 2015">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-17.webp" alt="Обложка «Светлячок» №17" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №17</h2>
+                    <p class="journal-period">весна 2015</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/8Umn/wyezMKXA4" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №17 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="18" data-start-year="2015" data-end-year="2015" data-period="сентябрь-октябрь 2015" data-start-period="сентябрь-октябрь 2015" data-end-period="сентябрь-октябрь 2015">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-18.webp" alt="Обложка «Светлячок» №18" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №18</h2>
+                    <p class="journal-period">сентябрь-октябрь 2015</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/bxvp/kS18zax5C" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №18 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="19" data-start-year="2015" data-end-year="2015" data-period="ноябрь-декабрь 2015" data-start-period="ноябрь-декабрь 2015" data-end-period="ноябрь-декабрь 2015">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-19.webp" alt="Обложка «Светлячок» №19" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №19</h2>
+                    <p class="journal-period">ноябрь-декабрь 2015</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/RpZP/C23hmXSWx" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №19 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="20" data-start-year="2016" data-end-year="2016" data-period="январь-февраль 2016" data-start-period="январь-февраль 2016" data-end-period="январь-февраль 2016">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-20.webp" alt="Обложка «Светлячок» №20" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №20</h2>
+                    <p class="journal-period">январь-февраль 2016</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/2Ci6/y6KAQ4JQx" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №20 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="21" data-start-year="2016" data-end-year="2016" data-period="весна 2016" data-start-period="весна 2016" data-end-period="весна 2016">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-21.webp" alt="Обложка «Светлячок» №21" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №21</h2>
+                    <p class="journal-period">весна 2016</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/2z5W/h1UpRXeK2" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №21 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="22" data-start-year="2016" data-end-year="2016" data-period="сентябрь-октябрь 2016" data-start-period="сентябрь-октябрь 2016" data-end-period="сентябрь-октябрь 2016">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-22.webp" alt="Обложка «Светлячок» №22" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №22</h2>
+                    <p class="journal-period">сентябрь-октябрь 2016</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/1GfG/59zPRzFpR" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №22 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="23" data-start-year="2016" data-end-year="2016" data-period="ноябрь-декабрь 2016" data-start-period="ноябрь-декабрь 2016" data-end-period="ноябрь-декабрь 2016">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-23.webp" alt="Обложка «Светлячок» №23" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №23</h2>
+                    <p class="journal-period">ноябрь-декабрь 2016</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/162U/NHS1WppyQ" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №23 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="24" data-start-year="2017" data-end-year="2017" data-period="январь-февраль 2017" data-start-period="январь-февраль 2017" data-end-period="январь-февраль 2017">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-24.webp" alt="Обложка «Светлячок» №24" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №24</h2>
+                    <p class="journal-period">январь-февраль 2017</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/PdPq/YbQdw6F8L" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №24 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="25" data-start-year="2017" data-end-year="2017" data-period="весна 2017" data-start-period="весна 2017" data-end-period="весна 2017">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-25.webp" alt="Обложка «Светлячок» №25" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №25</h2>
+                    <p class="journal-period">весна 2017</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/A82F/vjYW7QdEy" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №25 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="26" data-start-year="2017" data-end-year="2017" data-period="сентябрь-октябрь 2017" data-start-period="сентябрь-октябрь 2017" data-end-period="сентябрь-октябрь 2017">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-26.webp" alt="Обложка «Светлячок» №26" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №26</h2>
+                    <p class="journal-period">сентябрь-октябрь 2017</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/k8op/gLr6gkJvr" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №26 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="27" data-start-year="2017" data-end-year="2017" data-period="ноябрь-декабрь 2017" data-start-period="ноябрь-декабрь 2017" data-end-period="ноябрь-декабрь 2017">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-27.webp" alt="Обложка «Светлячок» №27" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №27</h2>
+                    <p class="journal-period">ноябрь-декабрь 2017</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/RT1c/o19B1b87T" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №27 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="28" data-start-year="2018" data-end-year="2018" data-period="январь-февраль 2018" data-start-period="январь-февраль 2018" data-end-period="январь-февраль 2018">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-28.webp" alt="Обложка «Светлячок» №28" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №28</h2>
+                    <p class="journal-period">январь-февраль 2018</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/j3QH/c5rCpnpNm" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №28 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="29" data-start-year="2018" data-end-year="2018" data-period="весна 2018" data-start-period="весна 2018" data-end-period="весна 2018">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-29.webp" alt="Обложка «Светлячок» №29" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №29</h2>
+                    <p class="journal-period">весна 2018</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/rdpk/oXXJhFf8a" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №29 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="30" data-start-year="2018" data-end-year="2018" data-period="сентябрь-октябрь 2018" data-start-period="сентябрь-октябрь 2018" data-end-period="сентябрь-октябрь 2018">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-30.webp" alt="Обложка «Светлячок» №30" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №30</h2>
+                    <p class="journal-period">сентябрь-октябрь 2018</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/5EQv/Yu9dKGJnv" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №30 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="31" data-start-year="2018" data-end-year="2018" data-period="ноябрь-декабрь 2018" data-start-period="ноябрь-декабрь 2018" data-end-period="ноябрь-декабрь 2018">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-31.webp" alt="Обложка «Светлячок» №31" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №31</h2>
+                    <p class="journal-period">ноябрь-декабрь 2018</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/KnUg/2jGhjM5hD" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №31 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="32" data-start-year="2019" data-end-year="2019" data-period="январь-февраль 2019" data-start-period="январь-февраль 2019" data-end-period="январь-февраль 2019">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-32.webp" alt="Обложка «Светлячок» №32" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №32</h2>
+                    <p class="journal-period">январь-февраль 2019</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/3thA/Sb77tURHL" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №32 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="33" data-start-year="2019" data-end-year="2019" data-period="весна 2019" data-start-period="весна 2019" data-end-period="весна 2019">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-33.webp" alt="Обложка «Светлячок» №33" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №33</h2>
+                    <p class="journal-period">весна 2019</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/mmzz/Krw68hrqL" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №33 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="34" data-start-year="2019" data-end-year="2019" data-period="лето 2019" data-start-period="лето 2019" data-end-period="лето 2019">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-34.webp" alt="Обложка «Светлячок» №34" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №34</h2>
+                    <p class="journal-period">лето 2019</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/7kBw/PrkUPnVNZ" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №34 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="35" data-start-year="2019" data-end-year="2019" data-period="осень 2019" data-start-period="осень 2019" data-end-period="осень 2019">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-35.webp" alt="Обложка «Светлячок» №35" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №35</h2>
+                    <p class="journal-period">осень 2019</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/7rwg/EYWbu4aj3" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №35 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="36" data-start-year="2020" data-end-year="2020" data-period="зима 2020" data-start-period="зима 2020" data-end-period="зима 2020">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-36.webp" alt="Обложка «Светлячок» №36" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №36</h2>
+                    <p class="journal-period">зима 2020</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/oLQ1/vu3dJfqMz" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №36 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="37" data-start-year="2020" data-end-year="2020" data-period="весна 2020" data-start-period="весна 2020" data-end-period="весна 2020">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-37.webp" alt="Обложка «Светлячок» №37" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №37</h2>
+                    <p class="journal-period">весна 2020</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/egpk/BVX2Jidiw" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №37 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="38" data-start-year="2020" data-end-year="2020" data-period="лето 2020" data-start-period="лето 2020" data-end-period="лето 2020">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-38.webp" alt="Обложка «Светлячок» №38" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №38</h2>
+                    <p class="journal-period">лето 2020</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/Ddyy/kdR1aVi3V" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №38 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="39" data-start-year="2020" data-end-year="2020" data-period="осень 2020" data-start-period="осень 2020" data-end-period="осень 2020">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-39.webp" alt="Обложка «Светлячок» №39" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №39</h2>
+                    <p class="journal-period">осень 2020</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/Ridc/ySoDLt3Q1" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №39 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="40" data-start-year="2021" data-end-year="2021" data-period="зима 2021" data-start-period="зима 2021" data-end-period="зима 2021">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-40.webp" alt="Обложка «Светлячок» №40" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №40</h2>
+                    <p class="journal-period">зима 2021</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/N9M5/ToVfeYEc5" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №40 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="41" data-start-year="2021" data-end-year="2021" data-period="весна 2021" data-start-period="весна 2021" data-end-period="весна 2021">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-41.webp" alt="Обложка «Светлячок» №41" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №41</h2>
+                    <p class="journal-period">весна 2021</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/VVgw/pXSLXE6j9" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №41 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="42" data-start-year="2021" data-end-year="2021" data-period="лето 2021" data-start-period="лето 2021" data-end-period="лето 2021">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-42.webp" alt="Обложка «Светлячок» №42" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №42</h2>
+                    <p class="journal-period">лето 2021</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/DaVC/SM98MUQDj" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №42 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="43" data-start-year="2021" data-end-year="2021" data-period="осень 2021" data-start-period="осень 2021" data-end-period="осень 2021">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-43.webp" alt="Обложка «Светлячок» №43" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №43</h2>
+                    <p class="journal-period">осень 2021</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/xhQp/dm7LYbD6N" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №43 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="44" data-start-year="2021" data-end-year="2022" data-period="зима 2021–2022 (декабрь 2021 / январь-февраль 2022)" data-start-period="декабрь 2021" data-end-period="январь-февраль 2022">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-44.webp" alt="Обложка «Светлячок» №44" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №44</h2>
+                    <p class="journal-period">зима 2021–2022 (декабрь 2021 / январь-февраль 2022)</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/ERsL/dU1qvGnnn" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №44 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="45" data-start-year="2022" data-end-year="2022" data-period="весна 2022" data-start-period="весна 2022" data-end-period="весна 2022">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-45.webp" alt="Обложка «Светлячок» №45" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №45</h2>
+                    <p class="journal-period">весна 2022</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/vTmv/53dp39Gh5" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №45 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="46" data-start-year="2022" data-end-year="2022" data-period="лето 2022" data-start-period="лето 2022" data-end-period="лето 2022">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-46.webp" alt="Обложка «Светлячок» №46" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №46</h2>
+                    <p class="journal-period">лето 2022</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/w5uc/WuNLaG2rL" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №46 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="47" data-start-year="2022" data-end-year="2022" data-period="осень 2022" data-start-period="осень 2022" data-end-period="осень 2022">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-47.webp" alt="Обложка «Светлячок» №47" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №47</h2>
+                    <p class="journal-period">осень 2022</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/sbw9/KbJAecWzC" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №47 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="48" data-start-year="2022" data-end-year="2023" data-period="зима 2022–2023 (декабрь 2022 / январь-февраль 2023)" data-start-period="декабрь 2022" data-end-period="январь-февраль 2023">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-48.webp" alt="Обложка «Светлячок» №48" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №48</h2>
+                    <p class="journal-period">зима 2022–2023 (декабрь 2022 / январь-февраль 2023)</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/rdAU/kWRxDaJok" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №48 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="49" data-start-year="2023" data-end-year="2023" data-period="весна 2023" data-start-period="весна 2023" data-end-period="весна 2023">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-49.webp" alt="Обложка «Светлячок» №49" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №49</h2>
+                    <p class="journal-period">весна 2023</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/s3XS/L74X1r3C8" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №49 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="50" data-start-year="2023" data-end-year="2023" data-period="лето 2023" data-start-period="лето 2023" data-end-period="лето 2023">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-50.webp" alt="Обложка «Светлячок» №50" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №50</h2>
+                    <p class="journal-period">лето 2023</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/fg7p/3uJBNrWCm" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №50 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="51" data-start-year="2023" data-end-year="2023" data-period="осень 2023" data-start-period="осень 2023" data-end-period="осень 2023">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-51.webp" alt="Обложка «Светлячок» №51" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №51</h2>
+                    <p class="journal-period">осень 2023</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/wKfB/c8RTGcr9p" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №51 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="52" data-start-year="2023" data-end-year="2024" data-period="зима 2023–2024 (декабрь 2023 / январь-февраль 2024)" data-start-period="декабрь 2023" data-end-period="январь-февраль 2024">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-52.webp" alt="Обложка «Светлячок» №52" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №52</h2>
+                    <p class="journal-period">зима 2023–2024 (декабрь 2023 / январь-февраль 2024)</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/u6SL/Ckkc3vRqn" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №52 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="53" data-start-year="2024" data-end-year="2024" data-period="весна 2024" data-start-period="весна 2024" data-end-period="весна 2024">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-53.webp" alt="Обложка «Светлячок» №53" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №53</h2>
+                    <p class="journal-period">весна 2024</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/tnu2/fAtZa96p3" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №53 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="54" data-start-year="2024" data-end-year="2024" data-period="лето 2024" data-start-period="лето 2024" data-end-period="лето 2024">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-54.webp" alt="Обложка «Светлячок» №54" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №54</h2>
+                    <p class="journal-period">лето 2024</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/TtsB/kfzhDEiXQ" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №54 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="55" data-start-year="2024" data-end-year="2024" data-period="осень 2024" data-start-period="осень 2024" data-end-period="осень 2024">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-55.webp" alt="Обложка «Светлячок» №55" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №55</h2>
+                    <p class="journal-period">осень 2024</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/xm1f/fxEYHofcn" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №55 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="56" data-start-year="2024" data-end-year="2025" data-period="зима 2024–2025 (декабрь 2024 / январь-февраль 2025)" data-start-period="декабрь 2024" data-end-period="январь-февраль 2025">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-56.webp" alt="Обложка «Светлячок» №56" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №56</h2>
+                    <p class="journal-period">зима 2024–2025 (декабрь 2024 / январь-февраль 2025)</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/g8p7/r1Ri4Aexq" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №56 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="57" data-start-year="2025" data-end-year="2025" data-period="весна 2025" data-start-period="весна 2025" data-end-period="весна 2025">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-57.webp" alt="Обложка «Светлячок» №57" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №57</h2>
+                    <p class="journal-period">весна 2025</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/PEht/NG35L7iaH" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №57 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="58" data-start-year="2025" data-end-year="2025" data-period="лето 2025" data-start-period="лето 2025" data-end-period="лето 2025">
+                <div class="journal-cover"><svg class="cover-svg" viewBox="0 0 638 902" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="«Светлячок» №58">
+                        <defs>
+                            <linearGradient id="sky58" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#267ac0"/>
+                                <stop offset="55%" stop-color="#449cd2"/>
+                                <stop offset="100%" stop-color="#a9cde8"/>
+                            </linearGradient>
+                            <linearGradient id="meadow58" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#4f834e"/>
+                                <stop offset="100%" stop-color="#355b35"/>
+                            </linearGradient>
+                            <filter id="blur58" x="-10%" y="-10%" width="120%" height="120%">
+                                <feGaussianBlur stdDeviation="10"/>
+                            </filter>
+                            <clipPath id="botClip58">
+                                <rect x="0" y="762" width="638" height="140"/>
+                            </clipPath>
+                        </defs>
+                        <rect x="0" y="0" width="638" height="140" fill="url(#sky58)"/>
+                        <rect x="0" y="13" width="638" height="13" fill="#f3f7fb"/>
+                        <g clip-path="url(#botClip58)">
+                            <rect x="0" y="762" width="638" height="140" fill="url(#meadow58)"/>
+                            <image href="/assets/journal-covers/svetlyachok-58.webp" x="-20" y="520" width="678" height="400" preserveAspectRatio="none" filter="url(#blur58)" opacity="0.55"/>
+                        </g>
+                        <image href="/assets/journal-covers/svetlyachok-58.webp" x="0" y="126" width="638" height="638" preserveAspectRatio="none"/>
+                        <rect x="17" y="761" width="594" height="6" rx="3" fill="#f8faf8"/>
+                        <rect x="0" y="850" width="638" height="7" fill="#f3f7f4"/>
+                        <image href="/assets/journal-covers/svetlyachok-masthead.png" x="44" y="32" width="552" height="124"/>
+                    </svg></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №58</h2>
+                    <p class="journal-period">лето 2025</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/VZ6Q/sdhyeT3ef" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №58 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="59" data-start-year="2025" data-end-year="2025" data-period="осень 2025" data-start-period="осень 2025" data-end-period="осень 2025">
+                <div class="journal-cover"><svg class="cover-svg" viewBox="0 0 638 902" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="«Светлячок» №59">
+                        <defs>
+                            <linearGradient id="slate59" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#1c262e"/>
+                                <stop offset="50%" stop-color="#31414a"/>
+                                <stop offset="100%" stop-color="#444c52"/>
+                            </linearGradient>
+                            <radialGradient id="leaf59" cx="5%" cy="100%" r="85%">
+                                <stop offset="0%" stop-color="#379d72" stop-opacity="0.9"/>
+                                <stop offset="100%" stop-color="#1c262e" stop-opacity="0"/>
+                            </radialGradient>
+                            <linearGradient id="navy59" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#163562"/>
+                                <stop offset="100%" stop-color="#0b396a"/>
+                            </linearGradient>
+                            <linearGradient id="woodBot59" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#182026"/>
+                                <stop offset="100%" stop-color="#242c32"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="0" width="638" height="140" fill="url(#slate59)"/>
+                        <rect x="0" y="25" width="125" height="110" fill="url(#leaf59)"/>
+                        <rect x="0" y="13" width="638" height="13" fill="#e9edf2"/>
+                        <image href="/assets/journal-covers/svetlyachok-59.webp" x="0" y="126" width="638" height="638" preserveAspectRatio="none"/>
+                        <rect x="0" y="756" width="638" height="70" fill="url(#navy59)"/>
+                        <text x="324" y="796" text-anchor="middle" fill="#eef3fa" font-family="Georgia, 'Times New Roman', serif" font-size="23" font-weight="700" letter-spacing="0.3">заместитель директора по УВР</text>
+                        <rect x="0" y="826" width="638" height="4" fill="#e2e9f2"/>
+                        <rect x="0" y="830" width="638" height="72" fill="url(#woodBot59)"/>
+                        <image href="/assets/journal-covers/svetlyachok-masthead.png" x="44" y="32" width="552" height="124"/>
+                    </svg></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №59</h2>
+                    <p class="journal-period">осень 2025</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/rq92/ikUKSbuhq" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №59 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="60" data-start-year="2025" data-end-year="2026" data-period="зима 2025–2026 (декабрь 2025 / январь-февраль 2026)" data-start-period="декабрь 2025" data-end-period="январь-февраль 2026">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-60.webp" alt="Обложка «Светлячок» №60" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №60</h2>
+                    <p class="journal-period">зима 2025–2026 (декабрь 2025 / январь-февраль 2026)</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/PEt4/sJCoQkt8c" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №60 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+            <article class="journal-card" data-issue-number="61" data-start-year="2026" data-end-year="2026" data-period="весна 2026" data-start-period="весна 2026" data-end-period="весна 2026">
+                <div class="journal-cover"><img src="/assets/journal-covers/svetlyachok-61.webp" alt="Обложка «Светлячок» №61" width="638" height="902" loading="lazy" decoding="async"></div>
+                <div class="journal-card-info">
+                    <h2>«Светлячок» №61</h2>
+                    <p class="journal-period">весна 2026</p>
+                    <a class="journal-action download" href="https://cloud.mail.ru/public/4bCZ/bz1RunGpM" target="_blank" rel="noopener noreferrer" aria-label="Скачать PDF «Светлячок» №61 (откроется в новой вкладке)">Скачать PDF</a>
+                </div>
+            </article>
+        </div>
+        <div class="journal-empty" id="emptyState" hidden>
+            <p>Выпуски не найдены. Попробуйте указать номер журнала, год или сезон.</p>
+            <button class="reset-search" id="emptyResetBtn" type="button">Очистить поиск</button>
+        </div>
+        <aside class="legal-notice" aria-label="Правовая информация">
+            <p>Доступ к Instagram ограничен на территории РФ по решению Тверского районного суда Москвы о запрете деятельности Meta Platforms Inc. В данный момент МБУ ДО «ЦДТ» и МХ «КРЯК» не используют данный ресурс в своей деятельности.</p>
+        </aside>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                <p class="footer-credit">© МБУ ДО «Центр детского творчества», 2025 – 2026 | Размещено при поддержке МХ «КРЯК»</p>
+                <p class="footer-notice">Использование материалов, размещённых на этом сайте, возможно только при обязательном указании автора и ссылки на источник.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

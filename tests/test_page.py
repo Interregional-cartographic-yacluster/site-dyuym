@@ -5,8 +5,23 @@ import re
 import unittest
 from urllib.parse import unquote, urlsplit
 
+from tools.site_routes import ROUTES
+
 
 ROOT = Path(__file__).resolve().parents[1]
+ROUTE_BY_SOURCE = {ROOT / source: route for route, source in ROUTES.items()}
+
+
+def resolve_local(page_path, url_path):
+    """Resolve a public path to its source file for local checks."""
+    if not url_path:
+        return page_path
+    decoded = unquote(url_path)
+    if decoded in ROUTES:
+        return ROOT / ROUTES[decoded]
+    if decoded.startswith("/"):
+        return ROOT / decoded.lstrip("/")
+    return (page_path.parent / decoded).resolve()
 
 
 class PageParser(HTMLParser):
@@ -25,6 +40,7 @@ class PageParser(HTMLParser):
         self.all_links = []
         self.images = []
         self.iframes = []
+        self.journal_cards = []
         self.class_counts = Counter()
         self.headings = []
         self.current_heading = None
@@ -32,6 +48,8 @@ class PageParser(HTMLParser):
         self.paragraphs = {"footer-credit": [], "footer-notice": []}
         self.in_navigation = False
         self.in_footer = False
+        self.footer_text = []
+        self.footer_credit_links = []
         self.current_paragraph = None
         self.current_anchor = None
         self.current_summary = None
@@ -41,10 +59,14 @@ class PageParser(HTMLParser):
         attrs = dict(attrs)
         classes = attrs.get("class", "").split()
         self.class_counts.update(classes)
+        if "journal-card" in classes:
+            self.journal_cards.append(attrs)
         if "id" in attrs:
             self.ids.append(attrs["id"])
         if tag == "a":
             self.all_links.append(attrs)
+            if self.in_footer and self.current_paragraph == "footer-credit":
+                self.footer_credit_links.append(attrs)
         if tag == "img":
             self.images.append(attrs)
         if tag == "iframe":
@@ -99,6 +121,8 @@ class PageParser(HTMLParser):
             )
         if tag in {"img", "script"} and "src" in attrs:
             self.local_references.append(attrs["src"])
+        if tag == "image" and "href" in attrs:
+            self.local_references.append(attrs["href"])
         if tag == "link" and "href" in attrs:
             self.local_references.append(attrs["href"])
             if "canonical" in attrs.get("rel", "").split():
@@ -137,6 +161,8 @@ class PageParser(HTMLParser):
             self.current_summary["text"].append(data)
         if self.current_menu_label is not None:
             self.current_menu_label["text"].append(data)
+        if self.in_footer:
+            self.footer_text.append(data)
         if self.current_paragraph:
             self.paragraphs[self.current_paragraph].append(data)
 
@@ -148,7 +174,7 @@ class HomePageTests(unittest.TestCase):
         cls.page.feed((ROOT / "index.html").read_text(encoding="utf-8"))
 
     def test_navigation_links_point_to_existing_targets(self):
-        self.assertIn("#home", self.page.navigation_links)
+        self.assertIn("/главная", self.page.navigation_links)
         counts = Counter(self.page.ids)
         self.assertTrue(all(count == 1 for count in counts.values()), "Page IDs must be unique")
         for link in self.page.navigation_links:
@@ -157,12 +183,12 @@ class HomePageTests(unittest.TestCase):
             if link.startswith("#"):
                 self.assertEqual(counts[link[1:]], 1, f"Missing target for {link}")
             elif not url.scheme and not url.netloc:
-                self.assertTrue((ROOT / unquote(url.path)).is_file(), f"Missing page for {link}")
+                self.assertTrue(resolve_local(ROOT / "index.html", url.path).is_file(), f"Missing page for {link}")
 
     def test_navigation_has_home_link_and_two_native_dropdown_sections(self):
         homes = [
             anchor for anchor in self.page.navigation_anchors
-            if anchor["attrs"].get("href") == "#home"
+            if anchor["attrs"].get("href") == "/главная" and anchor["text"] == "Главная"
         ]
         self.assertEqual(len(homes), 1)
         self.assertEqual(homes[0]["text"], "Главная")
@@ -216,14 +242,14 @@ class HomePageTests(unittest.TestCase):
     def test_pages_domain_and_canonical_url_match(self):
         domain = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
         self.assertEqual(domain, "www.cdtkursk-dyuym.ru")
-        self.assertEqual(self.page.canonical_url, f"https://{domain}/")
+        self.assertEqual(self.page.canonical_url, f"https://{domain}/главная")
         self.assertTrue((ROOT / ".nojekyll").is_file())
 
     def test_local_page_and_stylesheet_assets_exist(self):
         for reference in self.page.local_references:
             url = urlsplit(reference)
             if not url.scheme and not url.netloc:
-                self.assertTrue((ROOT / unquote(url.path)).is_file(), reference)
+                self.assertTrue(resolve_local(ROOT / "index.html", url.path).is_file(), reference)
 
         for stylesheet in (
             ROOT / "styles.css",
@@ -246,6 +272,11 @@ class AllPagesTests(unittest.TestCase):
             ROOT / "index.html",
             ROOT / "projects/kryak.html",
             ROOT / "projects/mediazavry.html",
+            ROOT / "journals/svetlyachok.html",
+            ROOT / "journals/volga-yunpress.html",
+            ROOT / "journals/media-camp.html",
+            ROOT / "journals/48-volna.html",
+            ROOT / "journals/globus.html",
         )
         cls.pages = {}
         for path in cls.paths:
@@ -262,9 +293,8 @@ class AllPagesTests(unittest.TestCase):
                 ]
                 self.assertEqual(len(brands), 1)
                 self.assertEqual(brands[0]["text"], "ДЮйМ")
-                self.assertEqual(
-                    (path.parent / brands[0]["attrs"]["href"]).resolve(), ROOT / "index.html"
-                )
+                self.assertEqual(brands[0]["attrs"]["href"], "/главная")
+                self.assertEqual(resolve_local(path, brands[0]["attrs"]["href"]), ROOT / "index.html")
                 self.assertEqual(
                     brands[0]["attrs"].get("aria-label"), "Медиашкола «ДЮйМ» — на главную"
                 )
@@ -305,19 +335,20 @@ class AllPagesTests(unittest.TestCase):
                 )
                 anchors = [item for item in page.navigation_anchors if item["owner"] is projects]
                 self.assertEqual(
-                    [(a["text"], (path.parent / unquote(urlsplit(a["attrs"]["href"]).path)).resolve())
+                    [(a["text"], resolve_local(path, urlsplit(a["attrs"]["href"]).path))
                      for a in anchors],
                     expected,
                 )
                 for anchor, (_, target) in zip(anchors, expected):
                     self.assertTrue(target.is_file())
+                    self.assertEqual(anchor["attrs"]["href"], ROUTE_BY_SOURCE[target])
                     self.assertEqual(anchor["attrs"].get("aria-current") == "page", path == target)
 
                 home = next(a for a in page.navigation_anchors if a["text"] == "Главная")
                 home_url = urlsplit(home["attrs"]["href"])
-                home_target = (path.parent / unquote(home_url.path)).resolve() if home_url.path else path
-                self.assertEqual(home_target, ROOT / "index.html")
-                self.assertEqual(home_url.fragment, "home")
+                self.assertEqual(home_url.path, "/главная")
+                self.assertEqual(resolve_local(path, home_url.path), ROOT / "index.html")
+                self.assertEqual(home_url.fragment, "")
                 self.assertEqual(home["attrs"].get("aria-current") == "page", path == ROOT / "index.html")
 
     def test_kryak_formal_name_is_updated(self):
@@ -356,6 +387,64 @@ class AllPagesTests(unittest.TestCase):
                     ["Светлячок", "Медиасобытия", "Волга-ЮНПРЕСС", "Media Camp", "48-ая волна", "Глобус"],
                 )
 
+    def test_journal_links_work_on_every_page(self):
+        expected = [
+            ("Светлячок", ROOT / "journals/svetlyachok.html"),
+            ("Волга-ЮНПРЕСС", ROOT / "journals/volga-yunpress.html"),
+            ("Media Camp", ROOT / "journals/media-camp.html"),
+            ("48-ая волна", ROOT / "journals/48-volna.html"),
+            ("Глобус", ROOT / "journals/globus.html"),
+        ]
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                names = {name for name, _ in expected}
+                anchors = [a for a in page.navigation_anchors if a["text"] in names]
+                self.assertEqual([a["text"] for a in anchors], [name for name, _ in expected])
+                for anchor, (name, target) in zip(anchors, expected):
+                    href = urlsplit(anchor["attrs"]["href"])
+                    self.assertEqual(resolve_local(path, href.path), target, name)
+                    self.assertEqual(href.path, ROUTE_BY_SOURCE[target])
+                    self.assertTrue(target.is_file())
+                    self.assertEqual(anchor["attrs"].get("aria-current") == "page", path == target)
+                    self.assertEqual(
+                        anchor["owner"]["summary"],
+                        "Медиасобытия" if name == "Волга-ЮНПРЕСС" else "Наши журналы",
+                    )
+                self.assertFalse(any(a["text"] == "Медиасобытия" for a in page.navigation_anchors))
+
+    def test_journal_archives_and_issue_links_are_present_without_javascript(self):
+        archives = [
+            ("svetlyachok.html", "Журнал «Светлячок»", 61, "cloud.mail.ru"),
+            ("volga-yunpress.html", "Газета «Дневник фестиваля»", 1, "www.calameo.com"),
+            ("media-camp.html", "Media Camp", 1, "www.calameo.com"),
+            ("48-volna.html", "«Сорок восьмая волна»", 4, "www.calameo.com"),
+            ("globus.html", "«Глобус»", 4, "www.calameo.com"),
+        ]
+        for filename, heading, count, host in archives:
+            with self.subTest(page=filename):
+                page = self.pages[ROOT / "journals" / filename]
+                self.assertEqual([h["text"] for h in page.headings if h["tag"] == "h1"], [heading])
+                self.assertEqual(len(page.journal_cards), count)
+                self.assertTrue(all("hidden" not in card for card in page.journal_cards))
+                issue_links = [a for a in page.all_links if urlsplit(a.get("href", "")).netloc == host]
+                self.assertEqual(len(issue_links), count)
+        svet = self.pages[ROOT / "journals/svetlyachok.html"]
+        self.assertEqual([int(card["data-issue-number"]) for card in svet.journal_cards], list(range(1, 62)))
+        self.assertEqual(svet.journal_cards[55]["data-period"], "зима 2024–2025 (декабрь 2024 / январь-февраль 2025)")
+        self.assertIn("/journals/svetlyachok.js", svet.local_references)
+
+        media_camp = self.pages[ROOT / "journals/media-camp.html"]
+        self.assertTrue(any(
+            link.get("href") == "https://www.calameo.com/read/006994183460c918117ed"
+            for link in media_camp.all_links
+        ))
+        self.assertTrue(any(
+            image.get("src") == "/assets/journal-covers/media-camp-01.webp"
+            and image.get("alt") == "Обложка Media Camp, выпуск 1/2023"
+            for image in media_camp.images
+        ))
+        self.assertIn("Выпуск 1/2023", (ROOT / "journals/media-camp.html").read_text(encoding="utf-8"))
+
     def test_all_footers_and_canonical_urls(self):
         credit = "© МБУ ДО «Центр детского творчества», 2025 – 2026 | Размещено при поддержке МХ «КРЯК»"
         notice = "Использование материалов, размещённых на этом сайте, возможно только при обязательном указании автора и ссылки на источник."
@@ -365,8 +454,13 @@ class AllPagesTests(unittest.TestCase):
                 text = {key: " ".join("".join(parts).split()) for key, parts in page.paragraphs.items()}
                 self.assertEqual(text["footer-credit"], credit)
                 self.assertEqual(text["footer-notice"], notice)
-                suffix = "" if path.name == "index.html" else path.relative_to(ROOT).as_posix()
-                self.assertEqual(page.canonical_url, f"https://{domain}/{suffix}")
+                self.assertEqual(page.footer_credit_links, [])
+                self.assertEqual(page.canonical_url, f"https://{domain}{ROUTE_BY_SOURCE[path]}")
+
+    def test_footer_has_no_back_to_top_link(self):
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                self.assertNotIn("наверх", " ".join(page.footer_text).casefold())
 
     def test_links_assets_and_fragments_are_valid(self):
         stylesheets = set()
@@ -382,7 +476,7 @@ class AllPagesTests(unittest.TestCase):
                     url = urlsplit(href)
                     if url.scheme or url.netloc:
                         continue
-                    target = (path.parent / unquote(url.path)).resolve() if url.path else path
+                    target = resolve_local(path, url.path)
                     self.assertTrue(target.is_file(), f"{path}: missing {href}")
                     if url.fragment and target in self.pages:
                         self.assertEqual(Counter(self.pages[target].ids)[unquote(url.fragment)], 1, href)
@@ -394,7 +488,7 @@ class AllPagesTests(unittest.TestCase):
                 for ref in page.local_references:
                     url = urlsplit(ref)
                     if not url.scheme and not url.netloc:
-                        target = (path.parent / unquote(url.path)).resolve()
+                        target = resolve_local(path, url.path)
                         self.assertTrue(target.is_file(), f"{path}: missing {ref}")
                         if target.suffix == ".css":
                             stylesheets.add(target)
@@ -418,7 +512,7 @@ class AllPagesTests(unittest.TestCase):
             (kryak, ["Роман Бугаенко", "Светлана Белоусова", "Полина Пожидаева", "Наталья Шеховцова", "Артём Русанов", "Кирилл Киреев"]),
             (media, ["Мария Федосова", "Светлана Белоусова"]),
         ):
-            self.assertIn("project-common.css", page.local_references)
+            self.assertIn("/projects/project-common.css", page.local_references)
             self.assertEqual(page.class_counts["team-member"], len(names))
             self.assertEqual(
                 [image["alt"] for image in page.images if "member-photo" in image.get("class", "").split()],
