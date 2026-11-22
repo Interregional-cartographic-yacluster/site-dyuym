@@ -38,6 +38,9 @@ class PageParser(HTMLParser):
         self.details_stack = []
         self.local_references = []
         self.all_links = []
+        self.anchors = []
+        self.current_page_anchor = None
+        self.icons = []
         self.images = []
         self.iframes = []
         self.journal_cards = []
@@ -65,6 +68,8 @@ class PageParser(HTMLParser):
             self.ids.append(attrs["id"])
         if tag == "a":
             self.all_links.append(attrs)
+            self.current_page_anchor = {"attrs": attrs, "text": []}
+            self.anchors.append(self.current_page_anchor)
             if self.in_footer and self.current_paragraph == "footer-credit":
                 self.footer_credit_links.append(attrs)
         if tag == "img":
@@ -125,8 +130,11 @@ class PageParser(HTMLParser):
             self.local_references.append(attrs["href"])
         if tag == "link" and "href" in attrs:
             self.local_references.append(attrs["href"])
-            if "canonical" in attrs.get("rel", "").split():
+            rel = attrs.get("rel", "").lower().split()
+            if "canonical" in rel:
                 self.canonical_url = attrs["href"]
+            if "icon" in rel:
+                self.icons.append(attrs)
 
     def handle_endtag(self, tag):
         if self.current_heading is not None and tag == self.current_heading["tag"]:
@@ -135,6 +143,9 @@ class PageParser(HTMLParser):
         if tag == "a" and self.current_anchor is not None:
             self.current_anchor["text"] = " ".join("".join(self.current_anchor["text"]).split())
             self.current_anchor = None
+        if tag == "a" and self.current_page_anchor is not None:
+            self.current_page_anchor["text"] = " ".join("".join(self.current_page_anchor["text"]).split())
+            self.current_page_anchor = None
         if tag == "span" and self.current_menu_label is not None:
             self.current_menu_label["text"] = " ".join("".join(self.current_menu_label["text"]).split())
             self.current_menu_label = None
@@ -157,6 +168,8 @@ class PageParser(HTMLParser):
             self.current_heading["text"].append(data)
         if self.current_anchor is not None:
             self.current_anchor["text"].append(data)
+        if self.current_page_anchor is not None:
+            self.current_page_anchor["text"].append(data)
         if self.current_summary is not None:
             self.current_summary["text"].append(data)
         if self.current_menu_label is not None:
@@ -238,6 +251,21 @@ class HomePageTests(unittest.TestCase):
             text["footer-notice"],
             "Использование материалов, размещённых на этом сайте, возможно только при обязательном указании автора и ссылки на источник.",
         )
+
+    def test_site_creation_credit_links_to_kryak_website(self):
+        links = [
+            anchor for anchor in self.page.anchors
+            if anchor["text"] == "МХ «КРЯК»"
+            and "kryak-link" in anchor["attrs"].get("class", "").split()
+        ]
+        self.assertEqual(len(links), 1)
+        self.assertEqual(links[0]["attrs"].get("href"), "https://www.yacluster-kryak.ru/")
+        self.assertEqual(links[0]["attrs"].get("target"), "_blank")
+        self.assertTrue({"noopener", "noreferrer"} <= set(links[0]["attrs"].get("rel", "").split()))
+        self.assertFalse(any(
+            link.get("href") == "https://sites.google.com/view/masterkart"
+            for link in self.page.all_links
+        ))
 
     def test_pages_domain_and_canonical_url_match(self):
         domain = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
@@ -321,6 +349,20 @@ class AllPagesTests(unittest.TestCase):
                 self.assertNotIn(".floating-shapes", content)
                 self.assertNotRegex(content, r"(?m)^\.shape\s*\{")
                 self.assertNotIn("@keyframes float", content)
+
+    def test_all_pages_use_the_school_logo_as_favicon(self):
+        favicon = ROOT / "assets/images/favicon.png"
+        image = favicon.read_bytes()
+        self.assertEqual(image[:8], b"\x89PNG\r\n\x1a\n")
+        self.assertEqual(int.from_bytes(image[16:20], "big"), 96)
+        self.assertEqual(int.from_bytes(image[20:24], "big"), 96)
+        for path, page in self.pages.items():
+            with self.subTest(page=path.relative_to(ROOT)):
+                self.assertEqual(len(page.icons), 1)
+                self.assertEqual(page.icons[0].get("href"), "/assets/images/favicon.png")
+                self.assertEqual(page.icons[0].get("type"), "image/png")
+                self.assertEqual(page.icons[0].get("sizes"), "96x96")
+                self.assertEqual(resolve_local(path, page.icons[0]["href"]), favicon)
 
     def test_brand_and_mobile_toggle_are_consistent(self):
         for path, page in self.pages.items():
@@ -559,8 +601,11 @@ class AllPagesTests(unittest.TestCase):
         self.assertEqual(kryak.class_counts["supporter-item"], 21)
         self.assertTrue({
             "mapFallback", "mapViews", "worldSvg", "mapSvg", "countrySvg",
-            "openWorldMap", "openRussiaMap", "openBelarusMap", "worldData", "russiaData", "countryData",
+            "openWorldMap", "openRussiaMap", "openBelarusMap", "russiaData", "countryData",
         } <= set(kryak.ids))
+        self.assertNotIn("worldData", kryak.ids)
+        self.assertNotIn("Список стран и статусов", (ROOT / "projects/kryak.html").read_text(encoding="utf-8"))
+        self.assertNotIn("worldData", (ROOT / "projects/kryak.js").read_text(encoding="utf-8"))
         self.assertEqual(media.class_counts["comic-series"], 5)
         self.assertEqual(media.class_counts["comic-page"], 35)
         self.assertEqual(len(media.iframes), 1)
