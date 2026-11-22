@@ -583,6 +583,18 @@ class AllPagesTests(unittest.TestCase):
                         f"{stylesheet}: missing {ref}",
                     )
 
+    def test_kryak_map_legend_and_info_block_are_spaced(self):
+        kryak = self.pages[ROOT / "projects/kryak.html"]
+        self.assertIn("mapViews", kryak.ids)
+        self.assertEqual(kryak.class_counts["legend-section"], 3)
+        self.assertEqual(kryak.class_counts["info-section"], 1)
+        css = (ROOT / "projects/kryak.css").read_text(encoding="utf-8")
+        rule = re.search(r"#mapViews:not\(\[hidden\]\)\s*\+\s*\.info-section\s*\{([^}]*)\}", css)
+        self.assertIsNotNone(rule, "The visible map should be separated from the information block")
+        gap = re.search(r"\bmargin-top\s*:\s*([0-9]+(?:\.[0-9]+)?)px\s*;", rule.group(1))
+        self.assertIsNotNone(gap)
+        self.assertGreater(float(gap.group(1)), 0)
+
     def test_project_content_and_map_controls_are_present(self):
         kryak = self.pages[ROOT / "projects/kryak.html"]
         media = self.pages[ROOT / "projects/mediazavry.html"]

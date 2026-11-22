@@ -847,7 +847,12 @@ h1, h2, h3, h4, h5 {
     margin-top: 5px;
 }
 
-/* Info Section (внутри карты России) */
+/* Separate the active map legend from the following information block. */
+#mapViews:not([hidden]) + .info-section {
+    margin-top: 30px;
+}
+
+/* Info Section */
 .info-section {
     background: white;
     border-radius: 20px;
