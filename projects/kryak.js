@@ -1731,7 +1731,6 @@ function renderMapData(elementId, paths, names, categories, labels, contacts = {
     });
     details.hidden = false;
 }
-renderMapData('worldData', WORLD_PATHS, WORLD_NAME, WORLD_CATEGORY, WORLD_CAT_LABEL);
 renderMapData('russiaData', MAP_PATHS, REGION_NAME, CATEGORY, CAT_LABEL, CONTACTS);
 
 })();

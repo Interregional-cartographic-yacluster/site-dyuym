@@ -77,7 +77,7 @@ class PagesBuildTests(unittest.TestCase):
     def test_published_legacy_paths_and_assets_remain_available(self):
         paths = ["/", "/index.html", "/projects/kryak.html", "/projects/mediazavry.html",
                  "/journals/media-camp.html", "/styles.css", "/script.js",
-                 "/assets/journal-covers/media-camp-01.webp"]
+                 "/assets/images/favicon.png", "/assets/journal-covers/media-camp-01.webp"]
         for path in paths:
             with self.subTest(path=path):
                 request = Request(self.base + path, method="HEAD")
