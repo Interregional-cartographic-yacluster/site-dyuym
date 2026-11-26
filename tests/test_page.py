@@ -393,8 +393,9 @@ class AllPagesTests(unittest.TestCase):
                 self.assertEqual(page.ids.count("site-nav-menu"), 1)
 
     def test_project_menu_has_exactly_two_working_links_on_every_page(self):
+        kryak_site = "https://www.yacluster-kryak.ru/"
         expected = [
-            ("МХ «КРЯК»", ROOT / "projects/kryak.html"),
+            ("МХ «КРЯК»", kryak_site),
             ("«МЕДИАЗАВРЫ, вперёд!»", ROOT / "projects/mediazavry.html"),
         ]
         for path, page in self.pages.items():
@@ -415,14 +416,23 @@ class AllPagesTests(unittest.TestCase):
                 )
                 anchors = [item for item in page.navigation_anchors if item["owner"] is projects]
                 self.assertEqual(
-                    [(a["text"], resolve_local(path, urlsplit(a["attrs"]["href"]).path))
-                     for a in anchors],
-                    expected,
+                    [a["text"] for a in anchors],
+                    [title for title, _ in expected],
                 )
-                for anchor, (_, target) in zip(anchors, expected):
-                    self.assertTrue(target.is_file())
-                    self.assertEqual(anchor["attrs"]["href"], ROUTE_BY_SOURCE[target])
-                    self.assertEqual(anchor["attrs"].get("aria-current") == "page", path == target)
+
+                kryak, mediazavry = anchors
+                # The KRYAK menu item goes to the official website in a new tab.
+                self.assertEqual(kryak["attrs"]["href"], kryak_site)
+                self.assertEqual(kryak["attrs"].get("target"), "_blank")
+                self.assertTrue({"noopener", "noreferrer"} <= set(kryak["attrs"].get("rel", "").split()))
+                self.assertNotIn("aria-current", kryak["attrs"])
+
+                target = ROOT / "projects/mediazavry.html"
+                href = urlsplit(mediazavry["attrs"]["href"])
+                self.assertTrue(target.is_file())
+                self.assertEqual(resolve_local(path, href.path), target)
+                self.assertEqual(href.path, ROUTE_BY_SOURCE[target])
+                self.assertEqual(mediazavry["attrs"].get("aria-current") == "page", path == target)
 
                 home = next(a for a in page.navigation_anchors if a["text"] == "Главная")
                 home_url = urlsplit(home["attrs"]["href"])
